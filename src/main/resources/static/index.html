@@ -1,0 +1,140 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>四则运算</title>
+
+<link rel="stylesheet" type="text/css" href="style.css" />
+
+<style type="text/css">
+.demo{width:760px; margin:60px auto 10px auto}
+.demo2{width:760px; margin:100px auto 10px auto}
+	.text-input1{margin:auto auto auto 220px;font-size: 20px;color: #3caa00}
+.text-input2{length:200px;
+}
+	.buttoncs{margin:auto auto auto 350px;}
+</style>
+
+<script type="text/javascript" src="jquery.min.js"></script>
+<script type="text/javascript" src="quiz.js"></script>
+<script type="text/javascript">
+//var init={'questions':[{'question':'jQuery是什么？','answers':['JavaScript库','CSS库','PHP框架','以上都不是'],'correctAnswer':1},{'question':'找出不同类的一项?','answers':['写字台','沙发','电视','桌布'],'correctAnswer':3},{'question':'国土面积最大的国家是：','answers':['美国','中国','俄罗斯','加拿大'],'correctAnswer':3},{'question':'月亮距离地球多远？','answers':['18万公里','38万公里','100万公里','180万公里'],'correctAnswer':2}]};
+var xhr = new XMLHttpRequest();//第一步：新建对象
+xhr.open('GET', 'floor/4/4', true);//第二步：打开连接  将请求参数写在url中
+xhr.send();//第三步：发送请求  将请求参数写在URL中
+/**
+ * 获取数据后的处理程序
+ */
+var init;
+var res='';
+xhr.onreadystatechange = function () {
+	if (xhr.readyState == 4 && xhr.status == 200) {
+		 res =  $.parseJSON(xhr.responseText);//获取到json字符串，解析
+		console.log(res);
+		console.log(res.questions);
+		init=res;
+		$('#quiz-container').jquizzy({
+			questions: res.questions
+		});
+	}
+};
+
+var level=1;
+var xainshitijie=0;
+var answersIteratorIndex;
+var newcon="";
+$(function(){
+	$("#class1").click(function () {
+		level=1;
+		$("#intro").click();
+	})
+	$("#class2").click(function () {
+		level=2;
+		$("#intro").click();
+	})
+	$("#class3").click(function () {
+		level=3;
+		$("#intro").click();
+	})
+	$("#class4").click(function () {
+		level=4;
+		$("#intro").click();
+	})
+	$("#class5").click(function () {
+		level=5;
+		$("#intro").click();
+	})
+	$("#class100").click(function () {
+		level=1000;
+		$("#intro").click();
+	})
+	$("#tijie").click(function () {
+		$(".pro").toggle();
+
+	})
+	$("#exam").click(function () {
+		var $eleForm = $("<form method='get'></form>");
+		$eleForm.attr("action","floor/fileDownLoad2/"+$("#geiti").val()+"/"+level);
+		$(document.body).append($eleForm);
+
+		//提交表单，实现下载
+		$eleForm.submit();
+	})
+	$("#intro").click(function () {
+		var a=$("#geiti").val();
+		console.log(a);
+		// if(a>200){
+		// 	alert("这题目也太多了，做不了了");
+		// 	return ;
+		// }
+		var xhr = new XMLHttpRequest();//第一步：新建对象
+		xhr.open('GET', 'floor/'+a+'/'+level, true);//第二步：打开连接  将请求参数写在url中
+		xhr.send();//第三步：发送请求  将请求参数写在URL中
+		/**
+		 * 获取数据后的处理程序
+		 */
+		var init;
+		xhr.onreadystatechange = function () {
+			if (xhr.readyState == 4 && xhr.status == 200) {
+				res =  $.parseJSON(xhr.responseText);//获取到json字符串，解析
+				console.log(res);
+				console.log(res.questions);
+				init=res;
+				$('#quiz-container').jquizzy({
+					questions: res.questions
+				});
+			}
+		};
+	})
+	// console.log(init);
+	// $('#quiz-container').jquizzy({
+    //     questions: init.questions
+    // });
+});
+
+</script>
+</head>
+
+<body>
+
+<div class="demo2"><a class="text-input1">请输入测试题数:</a>&nbsp;<input id="geiti" class="text-input2" value="4"/><br/><br/>
+	<button id="intro" class="buttoncs">确认</button><br/>
+	<button id="class1" class="buttoncs">一年级</button>
+	<button id="class2" class="buttoncs">二年级</button>
+	<button id="class3" class="buttoncs">三年级</button>
+	<button id="class4" class="buttoncs">四年级</button>
+	<button id="class5" class="buttoncs">有分数的难度</button>
+	<button id="class100" class="buttoncs">做个方程试试</button>
+	<button id="exam" class="buttoncs">下载考试试卷</button>
+	<button id="tijie" class="buttoncs">开启或者关闭题解</button>
+</div>
+<div class="demo">
+	<div id='quiz-container'></div>
+</div>
+
+
+
+
+</body>
+</html>
